@@ -1,4 +1,4 @@
-flask=3.1.2
-gunicorn=23.0.0
-wfastcgi=3.0.0
-twilio=9.8.4
+Flask==3.1.2
+gunicorn==23.0.0
+wfastcgi==3.0.0
+twilio==9.8.4
