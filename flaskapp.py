@@ -5,8 +5,8 @@ from twilio.twiml.messaging_response import MessagingResponse
 from twilio.request_validator import RequestValidator
 
 # Use conventional, uppercase env var names and safe defaults
-TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN", "")
-ACCOUNT_SID = os.getenv("ACCOUNT_SID", "")
+TWILIO_AUTH_TOKEN = os.getenv("twilio_auth_token", "")
+ACCOUNT_SID = os.getenv("accountsid", "")
 
 app = Flask(__name__)
 
