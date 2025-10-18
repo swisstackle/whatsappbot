@@ -2,12 +2,9 @@ from flask import Flask, request, Response
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.request_validator import RequestValidator
 from twilio.rest import Client
-TWILIO_AUTH_TOKEN = ""  # Keep this secret!
-ACCOUNT_SID = ""
-
-
-
-
+import os
+TWILIO_AUTH_TOKEN = os.environ.get('twilio_auth_token')  # Keep this secret!
+ACCOUNT_SID = os.environ.get('accountsid') 
 
 
 app = Flask(__name__)
@@ -41,3 +38,7 @@ def hello_world():
 
     # Return the TwiML (as XML) response
     return Response(str(resp), mimetype='text/xml')
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
