@@ -3,11 +3,18 @@ import logging
 from flask import Flask, request, Response
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.request_validator import RequestValidator
+from twilio.rest import Client
+
 
 # Use conventional, uppercase env var names and safe defaults
 TWILIO_AUTH_TOKEN = os.getenv("twilio_auth_token", "")
 ACCOUNT_SID = os.getenv("accountsid", "")
-
+client = Client(ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+conversation = client.conversations.v1.conversations.create(
+    friendly_name="My WhatsApp Group",
+    timers_inactive="PT0S",
+    timers_closed="PT0S" 
+)
 app = Flask(__name__)
 
 logging.basicConfig(level=logging.INFO)
@@ -40,6 +47,19 @@ def hello_world():
     resp.message(f"Received from {sender}: {message_body}")
 
     return Response(str(resp), mimetype="text/xml")
+
+@app.route("/add_to_group", methods=["POST"])
+def add_to_group():
+    data = request.json
+    conversation_sid = conversation.sid
+    user_whatsapp = data["user_whatsapp"]  # e.g., 'whatsapp:+12345556789'
+    twilio_whatsapp = "+15558375988"  # e.g., 'whatsapp:+10987654321'
+
+    participant = client.conversations.v1.conversations(conversation_sid).participants.create(
+        messaging_binding_address=user_whatsapp,
+        messaging_binding_proxy_address=twilio_whatsapp
+    )
+    return {"participant_sid": participant.sid}, 201
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
