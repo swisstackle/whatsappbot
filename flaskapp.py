@@ -50,10 +50,10 @@ def hello_world():
 
 @app.route("/add_to_group", methods=["POST"])
 def add_to_group():
-    data = request.json
+    data = request.form  # Changed from request.json to request.form
     conversation_sid = conversation.sid
-    user_whatsapp = data["user_whatsapp"]  # e.g., 'whatsapp:+12345556789'
-    twilio_whatsapp = "+15558375988"  # e.g., 'whatsapp:+10987654321'
+    user_whatsapp = data.get("user_whatsapp")  # Use .get() for safety
+    twilio_whatsapp = "+15558375988"
     print(f"Adding {user_whatsapp} to conversation {conversation_sid}")
     participant = client.conversations.v1.conversations(conversation_sid).participants.create(
         messaging_binding_address=user_whatsapp,
