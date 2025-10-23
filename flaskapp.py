@@ -54,7 +54,7 @@ def add_to_group():
     conversation_sid = conversation.sid
     user_whatsapp = data["user_whatsapp"]  # e.g., 'whatsapp:+12345556789'
     twilio_whatsapp = "+15558375988"  # e.g., 'whatsapp:+10987654321'
-
+    print(f"Adding {user_whatsapp} to conversation {conversation_sid}")
     participant = client.conversations.v1.conversations(conversation_sid).participants.create(
         messaging_binding_address=user_whatsapp,
         messaging_binding_proxy_address=twilio_whatsapp
