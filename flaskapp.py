@@ -36,7 +36,6 @@ def health():
 
 @app.route("/", methods=["GET", "POST"])
 def hello_world():
-    logger.info("This is an info log message")
     # Only validate Twilio signature for POST (webhooks). Skip if token missing.
     if request.method == "POST" and TWILIO_AUTH_TOKEN:
         signature = request.headers.get("X-Twilio-Signature", "")
@@ -59,11 +58,12 @@ def hello_world():
 def add_to_group():
     data = request.form  # Changed from request.json to request.form
     conversation_sid = conversation.sid
-    user_whatsapp = data.get("user_whatsapp")  # Use .get() for safety
-    twilio_whatsapp = "+15558375988"
+    user_whatsapp = data.get("user_whatsapp")
     print(f"Adding {user_whatsapp} to conversation {conversation_sid}")
+    twilio_whatsapp = "whatsapp:+15558375988"
+    user_whatsapp_whole = user_whatsapp if user_whatsapp.startswith("whatsapp:") else f"whatsapp:{user_whatsapp}"
     participant = client.conversations.v1.conversations(conversation_sid).participants.create(
-        messaging_binding_address=user_whatsapp,
+        messaging_binding_address=user_whatsapp_whole,
         messaging_binding_proxy_address=twilio_whatsapp
     )
     return {"participant_sid": participant.sid}, 201
