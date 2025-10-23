@@ -36,6 +36,7 @@ def health():
 
 @app.route("/", methods=["GET", "POST"])
 def hello_world():
+    logger.info("This is an info log message")
     # Only validate Twilio signature for POST (webhooks). Skip if token missing.
     if request.method == "POST" and TWILIO_AUTH_TOKEN:
         signature = request.headers.get("X-Twilio-Signature", "")
@@ -45,7 +46,7 @@ def hello_world():
         if not validator.validate(url, post_vars, signature):
             logger.warning("Twilio signature validation failed for %s", url)
             return "Forbidden", 403
-    logger.info("This is an info log message")
+    
     sender = request.form.get("From")  # e.g., 'whatsapp:+1234567890'
     message_body = request.form.get("Body", "")
 
