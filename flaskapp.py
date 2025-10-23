@@ -5,6 +5,10 @@ from twilio.twiml.messaging_response import MessagingResponse
 from twilio.request_validator import RequestValidator
 from twilio.rest import Client
 from flask_cors import CORS
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 # Use conventional, uppercase env var names and safe defaults
@@ -41,7 +45,7 @@ def hello_world():
         if not validator.validate(url, post_vars, signature):
             logger.warning("Twilio signature validation failed for %s", url)
             return "Forbidden", 403
-
+    logger.info("This is an info log message")
     sender = request.form.get("From")  # e.g., 'whatsapp:+1234567890'
     message_body = request.form.get("Body", "")
 
