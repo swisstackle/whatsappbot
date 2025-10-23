@@ -61,7 +61,7 @@ def add_to_group():
     user_whatsapp = data.get("user_whatsapp")
     print(f"Adding {user_whatsapp} to conversation {conversation_sid}")
     twilio_whatsapp = "whatsapp:+15558375988"
-    user_whatsapp_whole = user_whatsapp if user_whatsapp.startswith("whatsapp:") else f"whatsapp:{user_whatsapp}"
+    user_whatsapp_whole = f"whatsapp:{user_whatsapp}"
     print(f"User WhatsApp whole: {user_whatsapp_whole}")
     participant = client.conversations.v1.conversations(conversation_sid).participants.create(
         messaging_binding_address=user_whatsapp_whole,
