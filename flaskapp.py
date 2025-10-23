@@ -4,6 +4,7 @@ from flask import Flask, request, Response
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.request_validator import RequestValidator
 from twilio.rest import Client
+from flask_cors import CORS
 
 
 # Use conventional, uppercase env var names and safe defaults
@@ -16,6 +17,7 @@ conversation = client.conversations.v1.conversations.create(
     timers_closed="PT0S" 
 )
 app = Flask(__name__)
+CORS(app)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
