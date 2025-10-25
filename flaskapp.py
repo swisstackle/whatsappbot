@@ -77,10 +77,7 @@ def add_to_group():
     print(f"Twilio WhatsApp: {twilio_whatsapp}")
 
     participant = client.conversations.v1.conversations(conversation_sid).participants.create(
-        **{
-            "messagingBinding.address": user_whatsapp_whole,
-            "messagingBinding.proxyAddress": twilio_whatsapp
-        }
+        messaging_binding={'address': user_whatsapp_whole, 'proxy_address': twilio_whatsapp}
     )
     return {"participant_sid": participant.sid}, 201
 
