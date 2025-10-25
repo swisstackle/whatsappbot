@@ -30,6 +30,17 @@ if not TWILIO_AUTH_TOKEN:
     logger.warning("TWILIO_AUTH_TOKEN not set. Twilio request validation will be skipped. "
                    "Set TWILIO_AUTH_TOKEN in environment for production.")
 
+def format_whatsapp_address(num):
+    # naive normalization — adapt to your input formats
+    n = num.strip()
+    n = n.replace(" ", "").replace("-", "")
+    if n.startswith("whatsapp:"):
+        return n
+    if not n.startswith("+"):
+        # if you know the country, add it or raise
+        raise ValueError("number not in E.164")
+    return f"whatsapp:{n}"
+
 @app.route("/health", methods=["GET"])
 def health():
     return "OK", 200
@@ -60,9 +71,10 @@ def add_to_group():
     conversation_sid = conversation.sid
     user_whatsapp = data.get("user_whatsapp")
     print(f"Adding {user_whatsapp} to conversation {conversation_sid}")
-    twilio_whatsapp = "whatsapp:+15558375988"
-    user_whatsapp_whole = f"whatsapp:{user_whatsapp}"
+    twilio_whatsapp = format_whatsapp_address("+15558375988")
+    user_whatsapp_whole = format_whatsapp_address(user_whatsapp)
     print(f"User WhatsApp whole: {user_whatsapp_whole}")
+    print(f"Twilio WhatsApp: {twilio_whatsapp}")
     participant = client.conversations.v1.conversations(conversation_sid).participants.create(
         messaging_binding_address=user_whatsapp_whole,
         messaging_binding_proxy_address=twilio_whatsapp
